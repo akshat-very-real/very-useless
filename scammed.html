@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTC - You Have Been Scammed!</title>
+    <style>
+        * {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scam-popup {
+            background: #ff0000;
+            color: #ffffff;
+            border: 6px solid #ffff00;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 40px #ff0000, 0 0 20px #ffff00;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            animation: shake 0.2s infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(2px, 2px) rotate(0deg); }
+            20% { transform: translate(-2px, -2px) rotate(-1deg); }
+            40% { transform: translate(-3px, 0px) rotate(1deg); }
+            60% { transform: translate(3px, 2px) rotate(0deg); }
+            80% { transform: translate(1px, -1px) rotate(1deg); }
+            100% { transform: translate(-1px, 2px) rotate(-1deg); }
+        }
+
+        .scam-header {
+            font-size: 1.4rem;
+            background: #ffff00;
+            color: #000000;
+            padding: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            border: 2px dashed #000000;
+        }
+
+        .scam-title {
+            font-size: 2.8rem;
+            color: #ffffff;
+            text-shadow: 3px 3px 0 #000000;
+            margin: 10px 0;
+            text-transform: uppercase;
+        }
+
+        .scam-body {
+            font-family: sans-serif;
+            font-size: 1rem;
+            color: #ffff00;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .scam-btn {
+            background: #ffff00;
+            color: #cc0000;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 5px 0 #b3b300;
+        }
+
+        .scam-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #b3b300;
+        }
+
+        .meme-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .meme-title {
+            font-size: 2.5rem;
+            color: #38bdf8;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+
+        .meme-img {
+            max-width: 400px;
+            width: 90%;
+            object-fit: contain;
+            margin-bottom: 20px;
+            background-color: #111;
+        }
+
+        .meme-subtitle {
+            font-size: 1.2rem;
+            color: #089c00;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .next-meme-btn {
+            background: #38bdf8;
+            color: #000000;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .next-meme-btn:hover {
+            background: #0284c7;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scam-popup" id="scamBox">
+        <div class="scam-header">⚠️ SECURITY ALERT #9902 ⚠️</div>
+        <div class="scam-title">YOU HAVE BEEN HACKED! 🚨</div>
+        <div class="scam-body">
+            SYSTEM CORRUPTED! YOUR SENSITIVE DATA IS LEAKING!<br>
+            DO NOT CLOSE THIS WINDOW OR YOUR DEVICE WILL BE WIPED!
+        </div>
+        <button class="scam-btn" onclick="showMemePrank()">RECOVER DATA NOW ⚠️</button>
+    </div>
+
+    <div id="memeOverlay" class="meme-overlay">
+        <div class="meme-title">JUST KIDDING!</div>
+        <img id="memeImage" class="meme-img" src="" alt="Funny Hacker Meme">
+        <div class="meme-subtitle">🎉 Congratulations! You successfully beat the FTC Challenge! 🏆</div>
+        <button class="next-meme-btn" onclick="loadNextMeme()">Next Meme ➔</button>
+    </div>
+
+    <script>
+        const memes = [
+            "https://i.pinimg.com/736x/6e/ab/2a/6eab2a32b9f76b1fc2290566449054cf.jpg",
+            "https://i.pinimg.com/1200x/1a/ba/fb/1abafb14825c44b36d26df4c296eaa14.jpg",
+            "https://i.programmerhumor.io/2025/03/8d6a1ad9665410f997be0b516ab55ab8.jpeg",
+            "https://i.pinimg.com/1200x/db/ff/e2/dbffe2cc7972d58754895c5e3e003587.jpg",
+            "https://i.pinimg.com/1200x/c2/a6/a9/c2a6a9f22663735f5347ad9901870bba.jpg",
+            "https://i.pinimg.com/736x/0c/a2/b8/0ca2b84f4dafb12e7227e410c01c8edb.jpg",
+            "https://i.pinimg.com/736x/4e/84/78/4e8478aaf66a577f5eba1f188f0af944.jpg",
+        ];
+
+        let currentMemeIndex = 0;
+
+        function showMemePrank() {
+            document.getElementById("scamBox").style.display = "none";
+            const memeOverlay = document.getElementById("memeOverlay");
+            currentMemeIndex = 0;
+            document.getElementById("memeImage").src = memes[currentMemeIndex];
+            memeOverlay.style.display = "flex";
+        }
+
+        function loadNextMeme() {
+            currentMemeIndex = (currentMemeIndex + 1) % memes.length;
+            document.getElementById("memeImage").src = memes[currentMemeIndex];
+        }
+    </script>
+</body>
+</html>

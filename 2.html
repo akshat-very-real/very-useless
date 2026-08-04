@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTC - Level 2: Login Verification</title>
+    <style>
+        * {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #1e293b;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .form-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 440px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #0f172a;
+            font-size: 1.75rem;
+            text-align: center;
+        }
+
+        p.subtitle {
+            color: #64748b;
+            text-align: center;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #0284c7;
+        }
+
+        button.verify-btn {
+            width: 100%;
+            padding: 14px;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-top: 10px;
+        }
+
+        button.verify-btn:hover {
+            background: #000000;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .message.redirect {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .nav-container {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 440px;
+        }
+
+        .nav-btn {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-btn:hover {
+            color: #38bdf8;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            color: #004466;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-card">
+        <div style="text-align: center;">
+            <span class="level-badge">Level 2 of 4</span>
+        </div>
+        <h2>Credentials</h2>
+        <p class="subtitle">Enter details</p>
+
+        <form id="verifyForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" class="verify-btn">Verify Credentials</button>
+        </form>
+
+        <div id="statusMessage" class="message"></div>
+    </div>
+
+    <div class="nav-container">
+        <a href="1.html" class="nav-btn">⬅ Previous (Page 1)</a>
+        <a id="nextLink" href="3.html" class="nav-btn">Next (Page 3) ➔</a>
+    </div>
+
+    <script>
+        if (localStorage.getItem("ftc_trap_attempted") === "true") {
+            const nextLink = document.getElementById("nextLink");
+            nextLink.setAttribute("href", "4.html");
+            nextLink.innerText = "Next (Page 4) ➔";
+        }
+
+        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const msg = document.getElementById('statusMessage');
+
+            const VALID_USER = "user1234@bang";
+            const TRAP_PASS = "foolish_gla_student";
+            const REAL_PASS = "gla_cyber_master";
+
+            if (user !== VALID_USER) {
+                msg.className = "message error";
+                msg.style.display = "block";
+                msg.style.fontSize = "0.9rem";
+                msg.style.fontWeight = "normal";
+                msg.innerText = "Invalid Username! Double check it.";
+            } else if (pass === TRAP_PASS) {
+                localStorage.setItem("ftc_trap_attempted", "true");
+
+                const nextLink = document.getElementById("nextLink");
+                nextLink.setAttribute("href", "4.html");
+                nextLink.innerText = "Next (Page 4) ➔";
+
+                msg.className = "message error";
+                msg.style.display = "block";
+                msg.style.fontSize = "1.5rem";
+                msg.style.fontWeight = "800";
+                msg.style.lineHeight = "1.3";
+                msg.innerText = "WRONG PASSWORD! FIND THE CORRECT ONE!";
+            } else if (pass === REAL_PASS) {
+                msg.className = "message redirect";
+                msg.style.display = "block";
+                
+                let count = 1;
+                msg.innerText = "Redirecting in " + count + "...";
+
+                const interval = setInterval(function() {
+                    count++;
+                    if (count <= 3) {
+                        msg.innerText = "Redirecting in " + count + "...";
+                    } else {
+                        clearInterval(interval);
+                        // Redirect directly to scammed.html
+                        window.location.href = "scammed.html";
+                    }
+                }, 1000);
+
+            } else {
+                msg.className = "message error";
+                msg.style.display = "block";
+                msg.style.fontSize = "0.9rem";
+                msg.style.fontWeight = "normal";
+                msg.innerText = "Incorrect password. Foolish!!";
+            }
+        });
+    </script>
+</body>
+</html>
