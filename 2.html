@@ -175,10 +175,34 @@
     </div>
 
     <script>
-        if (localStorage.getItem("ftc_trap_attempted") === "true") {
-            const nextLink = document.getElementById("nextLink");
-            nextLink.setAttribute("href", "4.html");
-            nextLink.innerText = "Next (Page 4) ➔";
+        const TRAP_PASSWORDS = [
+            "foolish_gla_student",
+            "gla_trap_student",
+            "silly_gla_coder",
+            "fake_gla_master",
+            "gla_noob_hacker"
+        ];
+        const REAL_PASSWORDS = [
+            "gla_cyber_master",
+            "gla_cyber_ninja",
+            "gla_secure_admin",
+            "gla_root_god",
+            "gla_cyber_pro"
+        ];
+
+        function getActivePasswords() {
+            let trapPass = sessionStorage.getItem("ftc_trap_pass");
+            let realPass = sessionStorage.getItem("ftc_real_pass");
+
+            if (!trapPass || !TRAP_PASSWORDS.includes(trapPass)) {
+                trapPass = TRAP_PASSWORDS[Math.floor(Math.random() * TRAP_PASSWORDS.length)];
+                sessionStorage.setItem("ftc_trap_pass", trapPass);
+            }
+            if (!realPass || !REAL_PASSWORDS.includes(realPass)) {
+                realPass = REAL_PASSWORDS[Math.floor(Math.random() * REAL_PASSWORDS.length)];
+                sessionStorage.setItem("ftc_real_pass", realPass);
+            }
+            return { trapPass, realPass };
         }
 
         document.getElementById('verifyForm').addEventListener('submit', function(e) {
@@ -188,8 +212,7 @@
             const msg = document.getElementById('statusMessage');
 
             const VALID_USER = "user1234@bang";
-            const TRAP_PASS = "foolish_gla_student";
-            const REAL_PASS = "gla_cyber_master";
+            const { trapPass, realPass } = getActivePasswords();
 
             if (user !== VALID_USER) {
                 msg.className = "message error";
@@ -197,7 +220,7 @@
                 msg.style.fontSize = "0.9rem";
                 msg.style.fontWeight = "normal";
                 msg.innerText = "Invalid Username! Double check it.";
-            } else if (pass === TRAP_PASS) {
+            } else if (pass === trapPass || TRAP_PASSWORDS.includes(pass)) {
                 localStorage.setItem("ftc_trap_attempted", "true");
 
                 const nextLink = document.getElementById("nextLink");
@@ -210,7 +233,7 @@
                 msg.style.fontWeight = "800";
                 msg.style.lineHeight = "1.3";
                 msg.innerText = "WRONG PASSWORD! FIND THE CORRECT ONE!";
-            } else if (pass === REAL_PASS) {
+            } else if (pass === realPass) {
                 msg.className = "message redirect";
                 msg.style.display = "block";
                 

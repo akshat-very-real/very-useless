@@ -87,13 +87,29 @@
     <span class="level-badge">Level 3 of 4</span>
     <h1>Found the password?</h1>
 
-    <p style="font-size: 0.9rem; color: #cbd5e1;">Copy the password to save it</p>
 
     <div class="btn-wrapper">
         <!-- Page 3 Next button ALWAYS directs to Page 2 -->
         <a id="nextBtn" href="2.html" class="next-btn">Next ➔</a>
-        <span class="hidden-password">foolish_gla_student</span>
+        <span id="hiddenPassword" class="hidden-password">foolish_gla_student</span>
     </div>
 
+    <script>
+        const TRAP_PASSWORDS = [
+            "foolish_gla_student",
+            "gla_trapped_student",
+            "silly_gla_coder",
+            "fake_gla_student",
+            "gla_noob_hacker"
+        ];
+        
+        let trapPass = sessionStorage.getItem("ftc_trap_pass");
+        if (!trapPass || !TRAP_PASSWORDS.includes(trapPass)) {
+            trapPass = TRAP_PASSWORDS[Math.floor(Math.random() * TRAP_PASSWORDS.length)];
+            sessionStorage.setItem("ftc_trap_pass", trapPass);
+        }
+        
+        document.getElementById("hiddenPassword").innerText = trapPass;
+    </script>
 </body>
 </html>

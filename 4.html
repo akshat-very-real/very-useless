@@ -85,7 +85,23 @@
     <a href="2.html" class="back-btn">↩ Back to Page 2</a>
 
     <script>
+        const REAL_PASSWORDS = [
+            "gla_cyber_master",
+            "gla_cyber_ninja",
+            "gla_hacker_student",
+            "gla_root_god",
+            "gla_cyber_pro"
+        ];
+
+        let realPass = sessionStorage.getItem("ftc_real_pass");
+        if (!realPass || !REAL_PASSWORDS.includes(realPass)) {
+            realPass = REAL_PASSWORDS[Math.floor(Math.random() * REAL_PASSWORDS.length)];
+            sessionStorage.setItem("ftc_real_pass", realPass);
+        }
+
         const secret = document.getElementById("secretPassword");
+        secret.innerText = realPass;
+
         const randomX = Math.floor(Math.random() * 80) + 10;
         const randomY = Math.floor(Math.random() * 80) + 10;
         
